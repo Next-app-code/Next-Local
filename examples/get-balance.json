@@ -1,0 +1,106 @@
+{
+  "id": "example-get-balance",
+  "name": "Get Balance Example",
+  "description": "Simple workflow to get SOL balance of an account",
+  "nodes": [
+    {
+      "id": "node-1",
+      "type": "custom",
+      "position": { "x": 100, "y": 100 },
+      "data": {
+        "label": "RPC Connection",
+        "category": "rpc",
+        "type": "rpc-connection",
+        "inputs": [
+          { "id": "endpoint", "name": "Endpoint", "type": "input", "dataType": "string", "required": true }
+        ],
+        "outputs": [
+          { "id": "connection", "name": "Connection", "type": "output", "dataType": "connection" }
+        ],
+        "values": {},
+        "color": "#a855f7"
+      }
+    },
+    {
+      "id": "node-2",
+      "type": "custom",
+      "position": { "x": 100, "y": 250 },
+      "data": {
+        "label": "Public Key Input",
+        "category": "input",
+        "type": "input-publickey",
+        "inputs": [],
+        "outputs": [
+          { "id": "publicKey", "name": "Public Key", "type": "output", "dataType": "publickey" }
+        ],
+        "values": {
+          "value": "So11111111111111111111111111111111111111112"
+        },
+        "color": "#06b6d4"
+      }
+    },
+    {
+      "id": "node-3",
+      "type": "custom",
+      "position": { "x": 400, "y": 175 },
+      "data": {
+        "label": "Get Balance",
+        "category": "rpc",
+        "type": "get-balance",
+        "inputs": [
+          { "id": "connection", "name": "Connection", "type": "input", "dataType": "connection", "required": true },
+          { "id": "publicKey", "name": "Public Key", "type": "input", "dataType": "publickey", "required": true }
+        ],
+        "outputs": [
+          { "id": "balance", "name": "Balance (SOL)", "type": "output", "dataType": "number" },
+          { "id": "lamports", "name": "Lamports", "type": "output", "dataType": "number" }
+        ],
+        "values": {},
+        "color": "#a855f7"
+      }
+    },
+    {
+      "id": "node-4",
+      "type": "custom",
+      "position": { "x": 700, "y": 175 },
+      "data": {
+        "label": "Display",
+        "category": "output",
+        "type": "output-display",
+        "inputs": [
+          { "id": "value", "name": "Value", "type": "input", "dataType": "any", "required": true }
+        ],
+        "outputs": [],
+        "values": {},
+        "color": "#8b5cf6"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-1",
+      "source": "node-1",
+      "target": "node-3",
+      "sourceHandle": "connection",
+      "targetHandle": "connection"
+    },
+    {
+      "id": "edge-2",
+      "source": "node-2",
+      "target": "node-3",
+      "sourceHandle": "publicKey",
+      "targetHandle": "publicKey"
+    },
+    {
+      "id": "edge-3",
+      "source": "node-3",
+      "target": "node-4",
+      "sourceHandle": "balance",
+      "targetHandle": "value"
+    }
+  ],
+  "rpcEndpoint": "https://api.mainnet-beta.solana.com",
+  "createdAt": "2025-12-28T10:00:00.000Z",
+  "updatedAt": "2025-12-28T10:00:00.000Z"
+}
+
