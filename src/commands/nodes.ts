@@ -54,3 +54,4 @@ export function listNodes(options: NodesOptions): void {
   console.log(chalk.gray(`Total: ${nodes.length} nodes`));
 }
 
+
