@@ -2,17 +2,32 @@
 
 import { Command } from 'commander';
 import chalk from 'chalk';
+import figlet from 'figlet';
 import { runWorkflow } from './commands/run';
 import { validateWorkflow } from './commands/validate';
 import { listNodes } from './commands/nodes';
 import { initConfig } from './commands/init';
 
+// Display banner
+console.log(
+  chalk.white(
+    figlet.textSync('NEXT', {
+      font: 'ANSI Shadow',
+      horizontalLayout: 'default',
+    })
+  )
+);
+console.log(chalk.gray('  Solana Visual Workflow Execution - Local CLI\n'));
+console.log(chalk.gray('  CA: HZ2vrUNo4xVfF85oVyodRLFG1WCnZCRGe3qBcAUZpump'));
+console.log(chalk.gray('  https://app.nextlabs.work\n'));
+
 const program = new Command();
 
 program
   .name('next-local')
-  .description('CLI tool for executing Next workflows locally')
-  .version('1.0.0');
+  .description(chalk.white('Execute Solana workflows from the command line'))
+  .version('1.0.0', '-v, --version', 'Display version number')
+  .helpOption('-h, --help', 'Display help information');
 
 program
   .command('run <file>')
@@ -64,5 +79,6 @@ program
   });
 
 program.parse();
+
 
 
