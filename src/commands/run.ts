@@ -2,6 +2,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import chalk from 'chalk';
 import ora from 'ora';
+import Table from 'cli-table3';
 import { Connection, PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { Workflow, WorkflowNode, ExecutionContext } from '../types/workflow';
 import { buildExecutionOrder } from '../utils/graph';
@@ -104,13 +105,24 @@ export async function runWorkflow(filePath: string, options: RunOptions): Promis
     
     const duration = Date.now() - startTime;
     
+    // Summary table
     console.log();
-    console.log(chalk.bold('Execution complete:'));
-    console.log(chalk.green(`  Success: ${successCount}`));
-    if (errorCount > 0) {
-      console.log(chalk.red(`  Failed: ${errorCount}`));
-    }
-    console.log(chalk.gray(`  Duration: ${duration}ms`));
+    const summaryTable = new Table({
+      head: [chalk.bold.white('Summary'), chalk.bold.white('Value')],
+      colWidths: [20, 30],
+      style: { head: [], border: ['white'] }
+    });
+    
+    summaryTable.push(
+      [chalk.gray('Workflow'), chalk.white(workflow.name)],
+      [chalk.gray('Total Nodes'), chalk.white(executionOrder.length.toString())],
+      [chalk.green('✓ Success'), chalk.green(successCount.toString())],
+      [chalk.red('✗ Failed'), errorCount > 0 ? chalk.red(errorCount.toString()) : chalk.gray('0')],
+      [chalk.gray('Duration'), chalk.white(`${duration}ms`)]
+    );
+    
+    console.log(summaryTable.toString());
+    console.log();
     
   } catch (error) {
     spinner.fail('Workflow execution failed');
@@ -164,5 +176,6 @@ function formatResult(result: unknown): string {
   }
   return String(result);
 }
+
 
 
