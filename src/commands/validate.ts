@@ -2,6 +2,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import chalk from 'chalk';
 import ora from 'ora';
+import Table from 'cli-table3';
 import { Workflow } from '../types/workflow';
 import { nodeDefinitions } from '../data/nodeDefinitions';
 import { buildExecutionOrder } from '../utils/graph';
@@ -43,29 +44,44 @@ export async function validateWorkflow(filePath: string): Promise<void> {
     
     // Print results
     console.log();
-    console.log(chalk.bold('Validation Results:'));
-    console.log(chalk.gray(`  Name: ${workflow.name || 'Unnamed'}`));
-    console.log(chalk.gray(`  Nodes: ${workflow.nodes?.length || 0}`));
-    console.log(chalk.gray(`  Edges: ${workflow.edges?.length || 0}`));
+    
+    const infoTable = new Table({
+      head: [chalk.bold.white('Property'), chalk.bold.white('Value')],
+      colWidths: [20, 50],
+      style: { head: [], border: ['white'] }
+    });
+    
+    infoTable.push(
+      [chalk.gray('Workflow Name'), chalk.white(workflow.name || 'Unnamed')],
+      [chalk.gray('Total Nodes'), chalk.white(workflow.nodes?.length || 0)],
+      [chalk.gray('Total Edges'), chalk.white(workflow.edges?.length || 0)],
+      [chalk.gray('RPC Endpoint'), chalk.cyan(workflow.rpcEndpoint || 'Not set')],
+      [chalk.gray('Status'), result.valid ? chalk.green('✓ Valid') : chalk.red('✗ Invalid')]
+    );
+    
+    console.log(infoTable.toString());
     console.log();
     
     if (result.errors.length > 0) {
-      console.log(chalk.red.bold('Errors:'));
-      result.errors.forEach(error => {
-        console.log(chalk.red(`  - ${error}`));
+      console.log(chalk.red.bold('❌ Errors:\n'));
+      result.errors.forEach((error, i) => {
+        console.log(chalk.red(`  ${i + 1}. ${error}`));
       });
       console.log();
     }
     
     if (result.warnings.length > 0) {
-      console.log(chalk.yellow.bold('Warnings:'));
-      result.warnings.forEach(warning => {
-        console.log(chalk.yellow(`  - ${warning}`));
+      console.log(chalk.yellow.bold('⚠  Warnings:\n'));
+      result.warnings.forEach((warning, i) => {
+        console.log(chalk.yellow(`  ${i + 1}. ${warning}`));
       });
       console.log();
     }
     
-    if (!result.valid) {
+    if (result.valid) {
+      console.log(chalk.green.bold('✓ Workflow is ready to execute!\n'));
+    } else {
+      console.log(chalk.red.bold('✗ Please fix the errors before running.\n'));
       process.exit(1);
     }
     
@@ -154,5 +170,6 @@ function validateWorkflowStructure(workflow: Workflow): ValidationResult {
     warnings,
   };
 }
+
 
 
