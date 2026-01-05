@@ -10,7 +10,9 @@ interface InitOptions {
 }
 
 export async function initConfig(options: InitOptions): Promise<void> {
-  console.log(chalk.bold('\nInitialize New Workflow\n'));
+  console.log(chalk.bold.white('\n╔══════════════════════════════════════════╗'));
+  console.log(chalk.bold.white('║     Initialize New Workflow             ║'));
+  console.log(chalk.bold.white('╚══════════════════════════════════════════╝\n'));
   
   const answers = await inquirer.prompt([
     {
@@ -71,12 +73,14 @@ export async function initConfig(options: InitOptions): Promise<void> {
   await fs.writeJSON(outputPath, workflow, { spaces: 2 });
   
   console.log();
-  console.log(chalk.green(`Created workflow: ${outputPath}`));
-  console.log();
-  console.log('Next steps:');
-  console.log(chalk.gray('  1. Open the JSON file in the Next web editor'));
-  console.log(chalk.gray('  2. Add nodes and connect them'));
-  console.log(chalk.gray('  3. Run with: next-local run ' + answers.filename));
+  console.log(chalk.green.bold('✓ Workflow created successfully!\n'));
+  console.log(chalk.white(`📁 Location: ${chalk.cyan(outputPath)}\n`));
+  console.log(chalk.bold.white('Next steps:\n'));
+  console.log(chalk.gray('  1. ') + chalk.white('Edit in web:  ') + chalk.cyan('https://app.nextlabs.work'));
+  console.log(chalk.gray('  2. ') + chalk.white('Add nodes and connect them visually'));
+  console.log(chalk.gray('  3. ') + chalk.white('Export and run: ') + chalk.cyan(`next-local run ${answers.filename}`));
+  console.log(chalk.gray('  4. ') + chalk.white('Or validate: ') + chalk.cyan(`next-local validate ${answers.filename}\n`));
 }
+
 
 
