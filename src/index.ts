@@ -7,6 +7,8 @@ import { runWorkflow } from './commands/run';
 import { validateWorkflow } from './commands/validate';
 import { listNodes } from './commands/nodes';
 import { initConfig } from './commands/init';
+import { showWorkflowInfo } from './commands/info';
+import { exportWorkflow } from './commands/export';
 
 // Display banner
 console.log(
@@ -77,6 +79,42 @@ program
       process.exit(1);
     }
   });
+
+program
+  .command('info <file>')
+  .description('Show detailed information about a workflow')
+  .action(async (file) => {
+    try {
+      await showWorkflowInfo(file);
+    } catch (error) {
+      console.error(chalk.red('Error:'), error instanceof Error ? error.message : error);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('export <file>')
+  .description('Export workflow to a shareable format')
+  .option('-o, --output <path>', 'Output file path')
+  .option('-p, --pretty', 'Pretty print JSON')
+  .action(async (file, options) => {
+    try {
+      await exportWorkflow(file, options);
+    } catch (error) {
+      console.error(chalk.red('Error:'), error instanceof Error ? error.message : error);
+      process.exit(1);
+    }
+  });
+
+// Show help if no command provided
+if (!process.argv.slice(2).length) {
+  program.outputHelp();
+  console.log(chalk.gray('\n💡 Quick Start:\n'));
+  console.log(chalk.white('  next-local init') + chalk.gray('           # Create new workflow'));
+  console.log(chalk.white('  next-local nodes') + chalk.gray('          # List available nodes'));
+  console.log(chalk.white('  next-local run <file>') + chalk.gray('   # Execute workflow'));
+  console.log();
+}
 
 program.parse();
 
