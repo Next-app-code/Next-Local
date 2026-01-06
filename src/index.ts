@@ -9,6 +9,7 @@ import { listNodes } from './commands/nodes';
 import { initConfig } from './commands/init';
 import { showWorkflowInfo } from './commands/info';
 import { exportWorkflow } from './commands/export';
+import { interactiveMode } from './commands/interactive';
 
 // Display banner
 console.log(
@@ -100,6 +101,19 @@ program
   .action(async (file, options) => {
     try {
       await exportWorkflow(file, options);
+    } catch (error) {
+      console.error(chalk.red('Error:'), error instanceof Error ? error.message : error);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('interactive')
+  .alias('i')
+  .description('Launch interactive mode')
+  .action(async () => {
+    try {
+      await interactiveMode();
     } catch (error) {
       console.error(chalk.red('Error:'), error instanceof Error ? error.message : error);
       process.exit(1);
