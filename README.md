@@ -8,9 +8,6 @@
 
 Command-line interface for executing Next workflows locally.
 
-**CA**: `HZ2vrUNo4xVfF85oVyodRLFG1WCnZCRGe3qBcAUZpump`  
-[View on Pump.fun](https://pump.fun/coin/HZ2vrUNo4xVfF85oVyodRLFG1WCnZCRGe3qBcAUZpump)
-
 </div>
 
 ## Overview
