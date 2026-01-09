@@ -8,6 +8,8 @@
 
 Command-line interface for executing Next workflows locally.
 
+**Token**: [View on Bags.fm](https://bags.fm/3N5GNJtneiTACKcSueW9abCWgdKjgxTs56f4RagBBAGS)
+
 </div>
 
 ## Overview
